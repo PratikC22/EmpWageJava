@@ -1,4 +1,4 @@
-public class EmpWageBuilderUC6 {
+public class EmpWageBuilder {
 
                 // Constants
                 public static final int IS_PART_TIME = 1;
