@@ -1,4 +1,4 @@
-/*
+/**
  * Employee wage computation problem.
  *
  * @author Pratik Chaudhari
