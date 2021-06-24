@@ -1,34 +1,38 @@
-
+/***********************************************************************************************************
+ * Employee wage computation program
+ * 
+ * @author Pratik Chaudhari
+ * @since 18/06/2021
+ ***********************************************************************************************************/
 package empWage;
 
-import java.util.ArrayList;
+//importing the libraries
 
-//implementing the interface
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+//implementing interface
 public class EmpWage implements InterfaceEmpWage {
 	// declaring static variables
 	public static final int IS_FULL_TIME = 1;
 	public static final int IS_PART_TIME = 2;
-	// using Array List
+	// Array list
 	private ArrayList<CompanyEmpWage> companyEmpArrayList;
+	private Map<String, CompanyEmpWage> companyToEmpWageMap;
 
+	// using constructor
 	public EmpWage() {
 		companyEmpArrayList = new ArrayList<CompanyEmpWage>();
+		companyToEmpWageMap = new HashMap<>();
+
 	}
 
 	public void addCompanyEmpWage(String company, int empRatePerHour, int numOfWorkingDays, int maxHoursPerMonth) {
 
-		CompanyEmpWage companyEmpWage = new CompanyEmpWage(company, empRatePerHour, numOfWorkingDays, maxHoursPerMonth);
-		companyEmpArrayList.add(companyEmpWage);
-	}
-
-	public void computeEmpWage() {
-		for (int i = 0; i < companyEmpArrayList.size(); i++) {
-			CompanyEmpWage companyEmpwage = companyEmpArrayList.get(i);
-			companyEmpwage.setTotalEmpWage(this.computeEmpWage(companyEmpwage));
-			System.out.println("Company Name: " + companyEmpwage.company);
-			DisplayDailyWageforCompany(companyEmpwage);
-			System.out.println(companyEmpwage.company + "Total Wage is " + companyEmpwage.totalWage);
-		}
+		CompanyEmpWage companyEmpwage = new CompanyEmpWage(company, empRatePerHour, numOfWorkingDays, maxHoursPerMonth);
+		companyEmpArrayList.add(companyEmpwage);
+		companyToEmpWageMap.put(company, companyEmpwage);
 	}
 
 	public void DisplayDailyWageforCompany(CompanyEmpWage companyEmpwage) {
@@ -72,17 +76,31 @@ public class EmpWage implements InterfaceEmpWage {
 	}
 
 	public static void main(String args[]) {
-
+		// main method
 		System.out.println("Welcome to Employee Wage calculation");
 		EmpWage empwage = new EmpWage();
-		empwage.addCompanyEmpWage("Dmart", 20, 2, 10);
-		empwage.addCompanyEmpWage(" BIGBAZAR ", 5, 25, 25);
-		empwage.computeEmpWage();
+		empwage.addCompanyEmpWage("Dmart", 20, 20, 100);
+		empwage.addCompanyEmpWage(" BigBazar ", 5, 50, 200);
+		empwage.computeWage();
+		System.out.println("Total Wage for Dmart:" + empwage.getTotalWage("Dmart"));
+		System.out.println("Total Wage for BigBazar:" + empwage.getTotalWage("BigBazar"));
 	}
 
 	@Override
 	public void computeWage() {
+		for (int i = 0; i < companyEmpArrayList.size(); i++) {
+			CompanyEmpWage companyEmpWage = companyEmpArrayList.get(i);
+			companyEmpWage.setTotalEmpWage(this.computeEmpWage(companyEmpWage));
+			System.out.println("Company Name : " + companyEmpWage.company);
+			DisplayDailyWageforCompany(companyEmpWage);
+			System.out.println("Total Wage is:" + companyEmpWage.totalWage);
+		}
 
+	}
+
+	@Override
+	public int getTotalWage(String company) {
+		return companyToEmpWageMap.get(company).totalWage;
 	}
 
 }
